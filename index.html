@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#0b1220" />
+
+  <title>OTTECH Solutions — IT Support & Technology Solutions</title>
+  <meta name="description" content="OTTECH Solutions delivers reliable IT support, managed services, cloud, cybersecurity, and custom technology solutions that keep your business running and growing." />
+  <meta name="keywords" content="IT support, managed IT services, cybersecurity, cloud solutions, network support, OTTECH Solutions, business technology" />
+  <meta name="author" content="OTTECH Solutions" />
+
+  <!-- Open Graph / Social -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="OTTECH Solutions — IT Support & Technology Solutions" />
+  <meta property="og:description" content="Reliable IT support and modern technology solutions that keep your business running and growing." />
+  <meta property="og:site_name" content="OTTECH Solutions" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="OTTECH Solutions — IT Support & Technology Solutions" />
+  <meta name="twitter:description" content="Reliable IT support and modern technology solutions that keep your business running and growing." />
+
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+
+  <!-- Structured data for SEO -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "ProfessionalService",
+    "name": "OTTECH Solutions",
+    "description": "IT support and technology solutions for growing businesses.",
+    "areaServed": "Global",
+    "serviceType": ["IT Support", "Managed IT Services", "Cybersecurity", "Cloud Solutions"],
+    "telephone": "+1-800-688-3247",
+    "email": "hello@ottechsolutions.com",
+    "openingHours": "Mo-Fr 08:00-18:00"
+  }
+  </script>
+</head>
+<body>
+  <!-- Loading screen -->
+  <div class="loader" id="loader" aria-hidden="true">
+    <div class="loader__mark">
+      <span class="loader__logo">OT</span>
+      <div class="loader__bar"><span></span></div>
+    </div>
+  </div>
+
+  <!-- Scroll progress indicator -->
+  <div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
+
+  <!-- Skip link for accessibility -->
+  <a href="#hero" class="skip-link">Skip to content</a>
+
+  <!-- Navigation -->
+  <header class="nav" id="nav">
+    <div class="container nav__inner">
+      <a href="#hero" class="nav__brand" aria-label="OTTECH Solutions home">
+        <span class="nav__logo" aria-hidden="true">
+          <svg width="34" height="34" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="34" height="34" rx="9" fill="url(#navGrad)"/>
+            <path d="M11 12.5h12M17 12.5V23" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/>
+            <circle cx="17" cy="23.5" r="1.8" fill="#7cc4ff"/>
+            <defs>
+              <linearGradient id="navGrad" x1="0" y1="0" x2="34" y2="34" gradientUnits="userSpaceOnUse">
+                <stop stop-color="#2f7bff"/>
+                <stop offset="1" stop-color="#0b46c9"/>
+              </linearGradient>
+            </defs>
+          </svg>
+        </span>
+        <span class="nav__name">OTTECH<span class="nav__name-accent">Solutions</span></span>
+      </a>
+
+      <nav class="nav__links" id="navLinks" aria-label="Primary">
+        <a href="#hero" class="nav__link">Home</a>
+        <a href="#about" class="nav__link">About</a>
+        <a href="#services" class="nav__link">Services</a>
+        <a href="#why" class="nav__link">Why Us</a>
+        <a href="#contact" class="nav__link">Contact</a>
+        <a href="#contact" class="btn btn--primary nav__cta">Get a Quote</a>
+      </nav>
+
+      <button class="nav__toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="navLinks">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <!-- Hero -->
+    <section class="hero" id="hero">
+      <div class="hero__bg" aria-hidden="true">
+        <canvas id="network"></canvas>
+        <div class="hero__glow hero__glow--1"></div>
+        <div class="hero__glow hero__glow--2"></div>
+        <div class="hero__grid"></div>
+        <div class="hero__cursor" id="heroCursor"></div>
+      </div>
+
+      <div class="container hero__inner">
+        <p class="hero__eyebrow reveal" data-reveal>
+          <span class="hero__pulse"></span> Trusted IT partner for modern businesses
+        </p>
+        <h1 class="hero__title">
+          <span class="reveal-line" data-reveal>Technology that</span>
+          <span class="reveal-line" data-reveal>keeps your business</span>
+          <span class="reveal-line reveal-line--accent" data-reveal>moving forward.</span>
+        </h1>
+        <p class="hero__subtitle reveal" data-reveal>
+          OTTECH Solutions delivers fast, reliable IT support and smart technology
+          solutions — so you can focus on what you do best while we handle the rest.
+        </p>
+        <div class="hero__actions reveal" data-reveal>
+          <a href="#contact" class="btn btn--primary btn--lg">
+            Get a Free Quote
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+          <a href="#services" class="btn btn--ghost btn--lg">Explore Services</a>
+        </div>
+
+        <ul class="hero__highlights reveal" data-reveal>
+          <li class="hero__highlight">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8"/><path d="M12 7v5l3 2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Always-on support
+          </li>
+          <li class="hero__highlight">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6l7-3z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+            Proactive monitoring
+          </li>
+          <li class="hero__highlight">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+            Rapid response
+          </li>
+          <li class="hero__highlight">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="1.8"/><path d="M4 20c0-3.5 3.6-5.5 8-5.5s8 2 8 5.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+            Certified experts
+          </li>
+        </ul>
+      </div>
+
+      <a href="#about" class="hero__scroll" aria-label="Scroll to about section">
+        <span class="hero__scroll-mouse"><span></span></span>
+      </a>
+    </section>
+
+    <!-- Trust bar -->
+    <section class="trust" aria-label="Technologies we work with">
+      <div class="container">
+        <p class="trust__label reveal" data-reveal>Powering teams with best-in-class technology</p>
+        <div class="trust__logos reveal" data-reveal>
+          <span class="trust__logo">Microsoft&nbsp;365</span>
+          <span class="trust__logo">Azure</span>
+          <span class="trust__logo">AWS</span>
+          <span class="trust__logo">Google&nbsp;Workspace</span>
+          <span class="trust__logo">Cisco</span>
+          <span class="trust__logo">Fortinet</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- About -->
+    <section class="about section" id="about">
+      <div class="container about__grid">
+        <div class="about__media reveal" data-reveal>
+          <div class="about__image">
+            <div class="about__image-glow"></div>
+            <svg viewBox="0 0 480 400" class="about__illustration" role="img" aria-label="IT professionals collaborating">
+              <defs>
+                <linearGradient id="ab1" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0" stop-color="#eaf2ff"/><stop offset="1" stop-color="#dbe9ff"/>
+                </linearGradient>
+                <linearGradient id="ab2" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0" stop-color="#2f7bff"/><stop offset="1" stop-color="#0b46c9"/>
+                </linearGradient>
+              </defs>
+              <rect x="0" y="0" width="480" height="400" rx="20" fill="url(#ab1)"/>
+              <rect x="40" y="70" width="240" height="150" rx="14" fill="#fff" opacity=".9"/>
+              <rect x="60" y="92" width="120" height="12" rx="6" fill="url(#ab2)"/>
+              <rect x="60" y="116" width="200" height="8" rx="4" fill="#c9dbff"/>
+              <rect x="60" y="134" width="180" height="8" rx="4" fill="#c9dbff"/>
+              <rect x="60" y="152" width="150" height="8" rx="4" fill="#c9dbff"/>
+              <rect x="60" y="180" width="80" height="22" rx="11" fill="url(#ab2)"/>
+              <rect x="300" y="150" width="150" height="180" rx="14" fill="#0b1220"/>
+              <circle cx="375" cy="200" r="26" fill="url(#ab2)"/>
+              <rect x="330" y="240" width="90" height="8" rx="4" fill="#33507f"/>
+              <rect x="330" y="258" width="70" height="8" rx="4" fill="#33507f"/>
+              <rect x="330" y="286" width="90" height="24" rx="12" fill="#2f7bff"/>
+              <circle cx="120" cy="300" r="34" fill="url(#ab2)"/>
+              <path d="M104 300l12 12 22-24" stroke="#fff" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+              <rect x="170" y="270" width="110" height="10" rx="5" fill="#b9cfff"/>
+              <rect x="170" y="292" width="80" height="10" rx="5" fill="#b9cfff"/>
+            </svg>
+          </div>
+          <div class="about__badge">
+            <span class="about__badge-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6l7-3z" fill="#2f7bff"/><path d="M9 12l2 2 4-4" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </span>
+            <span>Trusted IT partner<br>for growing teams</span>
+          </div>
+        </div>
+
+        <div class="about__content">
+          <p class="eyebrow reveal" data-reveal>About OTTECH Solutions</p>
+          <h2 class="section__title reveal" data-reveal>Your dependable partner in technology</h2>
+          <p class="about__lead reveal" data-reveal>
+            We're a team of certified IT professionals who believe technology should
+            empower your business — not slow it down. From day-to-day support to
+            strategic planning, we deliver solutions tailored to how you actually work.
+          </p>
+          <p class="about__text reveal" data-reveal>
+            Whether you're a growing startup or an established company, OTTECH Solutions
+            provides the expertise, responsiveness, and reliability you need to stay
+            secure, productive, and ahead of the curve.
+          </p>
+          <ul class="about__list">
+            <li class="reveal" data-reveal><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" fill="#e6f0ff"/><path d="M8 12l2.5 2.5L16 9" stroke="#2f7bff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Certified, experienced engineers on every account</li>
+            <li class="reveal" data-reveal><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" fill="#e6f0ff"/><path d="M8 12l2.5 2.5L16 9" stroke="#2f7bff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Proactive monitoring that prevents problems</li>
+            <li class="reveal" data-reveal><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" fill="#e6f0ff"/><path d="M8 12l2.5 2.5L16 9" stroke="#2f7bff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Transparent pricing with no surprise fees</li>
+          </ul>
+          <a href="#contact" class="btn btn--dark reveal" data-reveal>Work with us</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Services -->
+    <section class="services section" id="services">
+      <div class="container">
+        <div class="section__head">
+          <p class="eyebrow reveal" data-reveal>What we do</p>
+          <h2 class="section__title reveal" data-reveal>Complete IT solutions under one roof</h2>
+          <p class="section__subtitle reveal" data-reveal>
+            Everything your business needs to run smoothly, securely, and at scale —
+            delivered by a team that genuinely cares about your success.
+          </p>
+        </div>
+
+        <div class="services__grid" id="servicesGrid">
+          <article class="card service reveal" data-reveal>
+            <div class="service__icon">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M9 3H5a2 2 0 00-2 2v4M15 3h4a2 2 0 012 2v4M9 21H5a2 2 0 01-2-2v-4M15 21h4a2 2 0 002-2v-4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><rect x="8" y="8" width="8" height="8" rx="2" stroke="currentColor" stroke-width="2"/></svg>
+            </div>
+            <h3 class="service__title">IT Support & Helpdesk</h3>
+            <p class="service__text">Fast, friendly technical support whenever you need it — remote or on-site — resolving issues before they disrupt your day.</p>
+          </article>
+
+          <article class="card service reveal" data-reveal>
+            <div class="service__icon">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6l7-3z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <h3 class="service__title">Cybersecurity</h3>
+            <p class="service__text">Protect your data and reputation with layered security, threat monitoring, and proactive defense against modern cyber threats.</p>
+          </article>
+
+          <article class="card service reveal" data-reveal>
+            <div class="service__icon">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M7 16a4 4 0 010-8 5 5 0 019.6-1.5A4.5 4.5 0 0117 16H7z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M12 11v5M9.5 13.5L12 11l2.5 2.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <h3 class="service__title">Cloud Solutions</h3>
+            <p class="service__text">Migrate, manage, and optimize cloud infrastructure for flexibility, collaboration, and cost savings your team will love.</p>
+          </article>
+
+          <article class="card service reveal" data-reveal>
+            <div class="service__icon">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="12" rx="2" stroke="currentColor" stroke-width="2"/><path d="M8 20h8M12 16v4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M7 8h6M7 11h4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            </div>
+            <h3 class="service__title">Managed IT Services</h3>
+            <p class="service__text">Offload your entire IT operation to us with 24/7 monitoring, maintenance, and strategic guidance for a predictable monthly cost.</p>
+          </article>
+
+          <article class="card service reveal" data-reveal>
+            <div class="service__icon">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/><path d="M4 12h2M18 12h2M12 4v2M12 18v2M6.3 6.3l1.4 1.4M16.3 16.3l1.4 1.4M17.7 6.3l-1.4 1.4M7.7 16.3l-1.4 1.4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            </div>
+            <h3 class="service__title">Network & Infrastructure</h3>
+            <p class="service__text">Design, install, and maintain fast, reliable networks that keep your team connected and your operations running seamlessly.</p>
+          </article>
+
+          <article class="card service reveal" data-reveal>
+            <div class="service__icon">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2v10z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M8 9h8M8 12h5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            </div>
+            <h3 class="service__title">IT Consulting</h3>
+            <p class="service__text">Strategic technology planning that aligns your IT roadmap with business goals, so every investment drives real results.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Why Choose Us -->
+    <section class="why section" id="why">
+      <div class="why__bg" aria-hidden="true"></div>
+      <div class="container">
+        <div class="section__head">
+          <p class="eyebrow eyebrow--light reveal" data-reveal>Why OTTECH Solutions</p>
+          <h2 class="section__title section__title--light reveal" data-reveal>The partner businesses trust and keep</h2>
+          <p class="section__subtitle section__subtitle--light reveal" data-reveal>
+            We don't just fix problems — we build lasting relationships grounded in
+            reliability, expertise, and genuine care for your success.
+          </p>
+        </div>
+
+        <div class="why__grid">
+          <article class="why__card reveal" data-reveal>
+            <div class="why__icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 2l2.5 7.5H22l-6 4.5 2.3 7.5L12 17l-6.3 4.5L8 14 2 9.5h7.5L12 2z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></div>
+            <h3>Rock-Solid Reliability</h3>
+            <p>Systems that stay online. With proactive monitoring and always-on infrastructure, we keep your business running without interruption.</p>
+          </article>
+
+          <article class="why__card reveal" data-reveal>
+            <div class="why__icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></div>
+            <h3>Responsive Support</h3>
+            <p>Real people, real fast. Our team responds quickly and communicates clearly — no tickets lost in a black hole.</p>
+          </article>
+
+          <article class="why__card reveal" data-reveal>
+            <div class="why__icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 3v18M3 7.5l9-4.5 9 4.5M5 10v6l7 3.5L19 16v-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+            <h3>Customized Solutions</h3>
+            <p>No cookie-cutter packages. We tailor every solution to your industry, workflow, budget, and long-term goals.</p>
+          </article>
+
+          <article class="why__card reveal" data-reveal>
+            <div class="why__icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="1.8"/><path d="M4 21c0-4 3.6-6 8-6s8 2 8 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></div>
+            <h3>True Professionalism</h3>
+            <p>Certified experts who show up prepared, communicate honestly, and treat your business as if it were their own.</p>
+          </article>
+
+          <article class="why__card reveal" data-reveal>
+            <div class="why__icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><rect x="4" y="4" width="16" height="16" rx="4" stroke="currentColor" stroke-width="1.8"/><path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+            <h3>Modern Technology</h3>
+            <p>We keep you ahead with the latest tools, automation, and best practices — future-proofing your business today.</p>
+          </article>
+
+          <article class="why__card why__card--cta reveal" data-reveal>
+            <h3>Ready to get started?</h3>
+            <p>Let's talk about how we can support your business.</p>
+            <a href="#contact" class="btn btn--primary">Get a Quote</a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact -->
+    <section class="contact section" id="contact">
+      <div class="container">
+        <div class="section__head">
+          <p class="eyebrow reveal" data-reveal>Get in touch</p>
+          <h2 class="section__title reveal" data-reveal>Let's build something reliable together</h2>
+          <p class="section__subtitle reveal" data-reveal>
+            Tell us about your needs and we'll get back to you within one business day
+            with a tailored plan and transparent quote.
+          </p>
+        </div>
+
+        <div class="contact__grid">
+          <div class="contact__info reveal" data-reveal>
+            <div class="contact__cards">
+              <a class="contact__item" href="tel:+18006883247">
+                <span class="contact__item-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M6 3h3l2 5-2.5 1.5a11 11 0 005 5L15 12l5 2v3a2 2 0 01-2 2A16 16 0 014 6a2 2 0 012-2z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></span>
+                <span class="contact__item-body"><small>Call us</small><strong>+1 (800) 688-3247</strong></span>
+              </a>
+              <a class="contact__item" href="mailto:hello@ottechsolutions.com">
+                <span class="contact__item-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor" stroke-width="2"/><path d="M4 7l8 6 8-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                <span class="contact__item-body"><small>Email us</small><strong>hello@ottechsolutions.com</strong></span>
+              </a>
+              <div class="contact__item">
+                <span class="contact__item-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/><path d="M12 7v5l3 2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                <span class="contact__item-body"><small>Business hours</small><strong>Mon–Fri, 8:00 AM – 6:00 PM</strong></span>
+              </div>
+              <div class="contact__item">
+                <span class="contact__item-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 21s7-5.3 7-11a7 7 0 10-14 0c0 5.7 7 11 7 11z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><circle cx="12" cy="10" r="2.5" stroke="currentColor" stroke-width="2"/></svg></span>
+                <span class="contact__item-body"><small>Location</small><strong>Serving clients nationwide</strong></span>
+              </div>
+            </div>
+
+            <div class="contact__map" aria-label="Map location">
+              <div class="contact__map-overlay">
+                <span class="contact__map-pin"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 21s7-5.3 7-11a7 7 0 10-14 0c0 5.7 7 11 7 11z" fill="#2f7bff"/><circle cx="12" cy="10" r="2.5" fill="#fff"/></svg></span>
+                <span>OTTECH Solutions HQ</span>
+              </div>
+            </div>
+          </div>
+
+          <form class="contact__form card reveal" data-reveal id="contactForm" novalidate>
+            <div class="field">
+              <label for="name">Full name</label>
+              <input type="text" id="name" name="name" placeholder="Jane Cooper" required autocomplete="name" />
+              <span class="field__error" data-error></span>
+            </div>
+            <div class="field-row">
+              <div class="field">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" placeholder="jane@company.com" required autocomplete="email" />
+                <span class="field__error" data-error></span>
+              </div>
+              <div class="field">
+                <label for="phone">Phone <span class="field__opt">(optional)</span></label>
+                <input type="tel" id="phone" name="phone" placeholder="+1 (555) 000-0000" autocomplete="tel" />
+              </div>
+            </div>
+            <div class="field">
+              <label for="service">What do you need help with?</label>
+              <select id="service" name="service">
+                <option value="">Select a service…</option>
+                <option>IT Support & Helpdesk</option>
+                <option>Cybersecurity</option>
+                <option>Cloud Solutions</option>
+                <option>Managed IT Services</option>
+                <option>Network & Infrastructure</option>
+                <option>IT Consulting</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="message">Message</label>
+              <textarea id="message" name="message" rows="4" placeholder="Tell us a bit about your business and what you're looking for…" required></textarea>
+              <span class="field__error" data-error></span>
+            </div>
+            <button type="submit" class="btn btn--primary btn--lg btn--block">
+              Send Message
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+            <p class="contact__form-note">We respect your privacy. Your information is never shared.</p>
+            <div class="contact__success" id="formSuccess" role="status" aria-live="polite" hidden>
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="11" fill="#16a34a"/><path d="M7 12.5l3 3 7-7" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              Thanks! Your message has been sent. We'll be in touch shortly.
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container footer__inner">
+      <div class="footer__brand">
+        <a href="#hero" class="nav__brand" aria-label="OTTECH Solutions home">
+          <span class="nav__logo" aria-hidden="true">
+            <svg width="34" height="34" viewBox="0 0 34 34" fill="none"><rect width="34" height="34" rx="9" fill="url(#fg)"/><path d="M11 12.5h12M17 12.5V23" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/><circle cx="17" cy="23.5" r="1.8" fill="#7cc4ff"/><defs><linearGradient id="fg" x1="0" y1="0" x2="34" y2="34"><stop stop-color="#2f7bff"/><stop offset="1" stop-color="#0b46c9"/></linearGradient></defs></svg>
+          </span>
+          <span class="nav__name">OTTECH<span class="nav__name-accent">Solutions</span></span>
+        </a>
+        <p class="footer__tagline">Reliable IT support and modern technology solutions that keep your business moving forward.</p>
+        <div class="footer__social">
+          <a href="#" aria-label="LinkedIn"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5a2.5 2.5 0 11-.02 5 2.5 2.5 0 01.02-5zM3 9h4v12H3zM9 9h3.8v1.7h.05c.53-1 1.83-2.05 3.77-2.05C20.3 8.65 21 11 21 14.1V21h-4v-6.1c0-1.45-.03-3.3-2-3.3-2 0-2.3 1.56-2.3 3.2V21H9z"/></svg></a>
+          <a href="#" aria-label="X (Twitter)"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18.9 2H22l-7.6 8.7L23 22h-6.8l-5.3-6.9L4.8 22H1.7l8.1-9.3L1 2h7l4.8 6.3L18.9 2zm-2.4 18h1.9L7.6 4H5.6l10.9 16z"/></svg></a>
+          <a href="#" aria-label="Facebook"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M13 22v-8h2.7l.4-3H13V9c0-.9.3-1.5 1.6-1.5H16V4.8c-.3 0-1.3-.1-2.4-.1-2.4 0-4 1.5-4 4.1V11H7v3h2.6v8z"/></svg></a>
+        </div>
+      </div>
+
+      <div class="footer__col">
+        <h4>Company</h4>
+        <a href="#about">About</a>
+        <a href="#why">Why Us</a>
+        <a href="#services">Services</a>
+        <a href="#contact">Contact</a>
+      </div>
+
+      <div class="footer__col">
+        <h4>Services</h4>
+        <a href="#services">IT Support</a>
+        <a href="#services">Cybersecurity</a>
+        <a href="#services">Cloud Solutions</a>
+        <a href="#services">Managed IT</a>
+      </div>
+
+      <div class="footer__col">
+        <h4>Contact</h4>
+        <a href="tel:+18006883247">+1 (800) 688-3247</a>
+        <a href="mailto:hello@ottechsolutions.com">hello@ottechsolutions.com</a>
+        <span>Mon–Fri, 8AM – 6PM</span>
+      </div>
+    </div>
+
+    <div class="container footer__bottom">
+      <p>&copy; <span id="year">2026</span> OTTECH Solutions. All rights reserved.</p>
+      <div class="footer__legal">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+        <a href="#">Cookie Policy</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Back to top -->
+  <button class="back-to-top" id="backToTop" aria-label="Back to top">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 19V5M6 11l6-6 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </button>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
