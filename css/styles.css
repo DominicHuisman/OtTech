@@ -155,12 +155,14 @@ input, textarea, select { font-family: inherit; font-size: inherit; }
 .btn--primary:hover::before { left: 130%; }
 
 .btn--ghost {
-  background: rgba(255,255,255,.06);
+  background: rgba(11, 18, 32, .72);
   color: #fff;
   border: 1px solid rgba(255,255,255,.22);
-  backdrop-filter: blur(6px);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  isolation: isolate;
 }
-.btn--ghost:hover { background: rgba(255,255,255,.14); transform: translateY(-2px); }
+.btn--ghost:hover { background: rgba(30, 41, 66, .82); transform: translateY(-2px); border-color: rgba(255,255,255,.32); }
 
 .btn--dark {
   background: var(--charcoal);
@@ -337,9 +339,10 @@ input, textarea, select { font-family: inherit; font-size: inherit; }
 .hero__actions {
   margin-top: 38px;
   display: flex;
-  gap: 14px;
+  gap: 22px;
   justify-content: center;
   flex-wrap: wrap;
+  isolation: isolate;
 }
 
 .hero__highlights {

@@ -246,9 +246,48 @@
     const heroEl = $('#hero');
     const cursorGlow = $('#heroCursor');
 
+    // Predefined constellation shapes — stars use normalized coords (-1..1),
+    // edges list index pairs describing the "connect-the-dots" pattern.
+    const CONSTELLATIONS = [
+      { // Big Dipper
+        stars: [[-1,-.35],[-.55,-.15],[-.15,-.05],[.25,.1],[.45,-.25],[.75,-.5],[1,-.15]],
+        edges: [[0,1],[1,2],[2,3],[3,4],[4,5],[3,6]],
+      },
+      { // Orion (belt + shoulders + feet)
+        stars: [[-.7,-.9],[.7,-.8],[-.2,-.15],[0,-.05],[.2,.05],[-.85,.75],[.75,.85],[-.35,.3]],
+        edges: [[0,2],[1,4],[2,3],[3,4],[2,5],[4,6],[3,7]],
+      },
+      { // Cassiopeia (W)
+        stars: [[-1,-.2],[-.5,.4],[0,-.3],[.5,.4],[1,-.15]],
+        edges: [[0,1],[1,2],[2,3],[3,4]],
+      },
+      { // Cygnus (cross)
+        stars: [[0,-1],[-.05,-.2],[-.9,.1],[.85,.05],[.05,.9]],
+        edges: [[0,1],[1,2],[1,3],[1,4]],
+      },
+      { // Lyra (small parallelogram + star)
+        stars: [[0,-1],[-.4,-.15],[.4,-.05],[-.3,.6],[.45,.7]],
+        edges: [[0,1],[0,2],[1,3],[2,4],[3,4]],
+      },
+      { // Corona Borealis (arc)
+        stars: [[-1,.35],[-.65,-.05],[-.25,-.35],[.2,-.4],[.6,-.2],[.9,.15]],
+        edges: [[0,1],[1,2],[2,3],[3,4],[4,5]],
+      },
+      { // Triangulum
+        stars: [[-.9,.5],[.9,.4],[-.1,-.8]],
+        edges: [[0,1],[1,2],[2,0]],
+      },
+      { // Ursa Minor (little dipper)
+        stars: [[-.9,-.4],[-.45,-.2],[-.05,-.05],[.35,.15],[.65,-.15],[.9,-.45],[.6,.35]],
+        edges: [[0,1],[1,2],[2,3],[3,4],[4,5],[3,6]],
+      },
+    ];
+
+    const constellations = [];
+
     const config = () => {
       const area = window.innerWidth * window.innerHeight;
-      return Math.min(Math.max(Math.floor(area / 15000), 30), 90);
+      return Math.min(Math.max(Math.floor(area / 12000), 40), 120);
     };
 
     const resize = () => {
@@ -257,6 +296,41 @@
       canvas.width = width * DPR;
       canvas.height = height * DPR;
       ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+    };
+
+    const buildConstellations = () => {
+      constellations.length = 0;
+      // Scale count with viewport size (roughly 1 per 220k px^2)
+      const target = Math.min(Math.max(Math.round((width * height) / 220000), 3), 8);
+      const shuffled = CONSTELLATIONS.slice().sort(() => Math.random() - 0.5);
+      for (let i = 0; i < target; i++) {
+        const shape = shuffled[i % shuffled.length];
+        const scale = 60 + Math.random() * 70; // 60–130px radius
+        const pad = scale + 20;
+        const cx = pad + Math.random() * Math.max(1, width - pad * 2);
+        const cy = pad + Math.random() * Math.max(1, height - pad * 2);
+        const rot = Math.random() * Math.PI * 2;
+        const cos = Math.cos(rot), sin = Math.sin(rot);
+        const stars = shape.stars.map(([nx, ny]) => {
+          const rx = nx * cos - ny * sin;
+          const ry = nx * sin + ny * cos;
+          return {
+            ox: rx * scale,   // offset from center (rotated + scaled)
+            oy: ry * scale,
+            x: cx + rx * scale,
+            y: cy + ry * scale,
+            r: 1.1 + Math.random() * 1.3,
+            tw: Math.random() * Math.PI * 2, // twinkle phase
+          };
+        });
+        constellations.push({
+          cx, cy,
+          vx: (Math.random() - 0.5) * 0.12,
+          vy: (Math.random() - 0.5) * 0.12,
+          stars,
+          edges: shape.edges,
+        });
+      }
     };
 
     const init = () => {
@@ -269,12 +343,74 @@
         vy: (Math.random() - 0.5) * 0.4,
         r: Math.random() * 1.6 + 0.6,
       }));
+      buildConstellations();
     };
 
+    let tick = 0;
     const draw = () => {
       ctx.clearRect(0, 0, width, height);
+      tick += 0.016;
       const maxDist = 130;
       const mouseDist = 180;
+
+      // --- Constellations: drift, draw fixed connections, twinkling stars ---
+      for (const c of constellations) {
+        c.cx += c.vx; c.cy += c.vy;
+        // Bounce softly against edges based on farthest star extent
+        let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
+        for (const s of c.stars) {
+          s.x = c.cx + s.ox;
+          s.y = c.cy + s.oy;
+          if (s.x < minX) minX = s.x; if (s.x > maxX) maxX = s.x;
+          if (s.y < minY) minY = s.y; if (s.y > maxY) maxY = s.y;
+        }
+        if (minX < 0 && c.vx < 0) c.vx *= -1;
+        if (maxX > width && c.vx > 0) c.vx *= -1;
+        if (minY < 0 && c.vy < 0) c.vy *= -1;
+        if (maxY > height && c.vy > 0) c.vy *= -1;
+
+        // Fixed constellation lines
+        for (const [a, b] of c.edges) {
+          const s1 = c.stars[a], s2 = c.stars[b];
+          ctx.beginPath();
+          ctx.moveTo(s1.x, s1.y);
+          ctx.lineTo(s2.x, s2.y);
+          ctx.strokeStyle = 'rgba(124,196,255,0.28)';
+          ctx.lineWidth = 1;
+          ctx.stroke();
+        }
+        // Stars (with subtle twinkle + halo)
+        for (const s of c.stars) {
+          const tw = 0.75 + Math.sin(tick * 1.4 + s.tw) * 0.25;
+          // halo
+          ctx.beginPath();
+          ctx.arc(s.x, s.y, s.r * 3.2, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(124,196,255,${0.08 * tw})`;
+          ctx.fill();
+          // core
+          ctx.beginPath();
+          ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(210,230,255,${0.85 * tw})`;
+          ctx.fill();
+
+          // Cursor connection line to constellation stars
+          if (mouse.active && mouse.x !== null) {
+            const cdx = s.x - mouse.x, cdy = s.y - mouse.y;
+            const cd = Math.hypot(cdx, cdy);
+            if (cd < mouseDist) {
+              const a = (1 - cd / mouseDist) * 0.55;
+              ctx.beginPath();
+              ctx.moveTo(s.x, s.y);
+              ctx.lineTo(mouse.x, mouse.y);
+              ctx.strokeStyle = `rgba(160,210,255,${a})`;
+              ctx.lineWidth = 1;
+              ctx.stroke();
+            }
+          }
+        }
+      }
+
+      // --- Free-floating background points (with mouse interactivity) ---
       for (let i = 0; i < points.length; i++) {
         const p = points[i];
         p.x += p.vx; p.y += p.vy;
