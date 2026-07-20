@@ -121,6 +121,12 @@
   stagger(revealEls);
 
   if ('IntersectionObserver' in window && !prefersReduced) {
+    // On mobile the sections are 100dvh tall, so the previous
+    // '-22% from bottom' margin meant reveals didn't fire until
+    // the element was already halfway up the screen. Use a
+    // generous positive bottom margin on mobile so animations
+    // begin as soon as the element edges into the viewport.
+    const isMobile = window.matchMedia('(max-width: 640px)').matches;
     const io = new IntersectionObserver((entries, obs) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
@@ -128,13 +134,15 @@
           obs.unobserve(entry.target);
         }
       });
-    }, { threshold: 0.2, rootMargin: '0px 0px -22% 0px' });
+    }, isMobile
+      ? { threshold: 0.01, rootMargin: '0px 0px 15% 0px' }
+      : { threshold: 0.2, rootMargin: '0px 0px -22% 0px' });
     revealEls.forEach((el) => io.observe(el));
 
     // Hero line reveals
     const lineObserver = new IntersectionObserver((entries) => {
       entries.forEach((e) => { if (e.isIntersecting) e.target.classList.add('is-visible'); });
-    }, { threshold: 0.3 });
+    }, isMobile ? { threshold: 0.01 } : { threshold: 0.3 });
     $$('.reveal-line').forEach((el, i) => {
       el.style.transitionDelay = 0.15 + i * 0.12 + 's';
       lineObserver.observe(el);

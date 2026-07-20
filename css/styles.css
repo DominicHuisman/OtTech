@@ -1552,8 +1552,16 @@ a.contact__item:hover { transform: translateY(-3px); box-shadow: var(--shadow-md
     gap: 2px;
     position: fixed;
     right: 4px;
-    top: 50%;
+    /* Use large-viewport-height so the rail stays anchored to the
+       middle of the screen even as iOS Safari's URL bar shows and
+       hides. `top: 50%` would recompute as the viewport height
+       animates, making the rail visibly slide during scroll. */
+    top: 50vh;
+    top: 50lvh;
     transform: translateY(-50%);
+    /* Do not transition transform — only fade opacity — so any
+       scroll-driven layout tick can't be animated. */
+    will-change: opacity;
     z-index: 90;
     padding: 4px 2px;
     border-radius: 999px;
