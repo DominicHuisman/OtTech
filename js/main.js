@@ -59,8 +59,6 @@
   /* ---------- Scroll progress + back-to-top ---------- */
   const progress = $('#scrollProgress');
   const backToTop = $('#backToTop');
-  const mobileBar = $('#mobileBar');
-  const mqMobile = window.matchMedia('(max-width: 640px)');
 
   const onScroll = () => {
     onScrollNav();
@@ -69,11 +67,6 @@
     const pct = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
     if (progress) progress.style.width = pct + '%';
     if (backToTop) backToTop.classList.toggle('is-visible', scrollTop > 600);
-    if (mobileBar && mqMobile.matches) {
-      mobileBar.classList.toggle('is-visible', scrollTop > 320);
-    } else if (mobileBar) {
-      mobileBar.classList.remove('is-visible');
-    }
   };
   window.addEventListener('scroll', onScroll, { passive: true });
   onScroll();
