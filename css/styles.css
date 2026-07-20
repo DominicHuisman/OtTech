@@ -1185,6 +1185,23 @@ a.contact__item:hover { transform: translateY(-3px); box-shadow: var(--shadow-md
      lose the user's scroll position on close. */
   body.nav-open { overflow: hidden; }
 
+  /* iOS Safari's URL-bar "smart tinting" samples the actual pixel
+     color at the top and bottom edges of the viewport and can
+     override <meta name="theme-color"> after the initial paint.
+     To keep the browser chrome consistently dark navy on every
+     section, force the body background and the scrolled-nav
+     background to the same dark tone so there is nothing light
+     for Safari to sample at the edges. */
+  body { background: #060b1c; }
+  .nav.is-scrolled {
+    background: rgba(6, 11, 28, .82);
+    border-bottom-color: rgba(255, 255, 255, .08);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, .35);
+  }
+  .nav.is-scrolled .nav__name { color: #fff; }
+  .nav.is-scrolled .nav__name-accent { color: var(--sky); }
+  .nav.is-scrolled .nav__toggle span { background: #fff; }
+
   /* Every mobile page shares a common shell: full viewport height,
      centered content, top padding that clears the fixed nav, and
      ambient bottom padding for the home indicator. */
