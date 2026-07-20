@@ -1538,33 +1538,45 @@ a.contact__item:hover { transform: translateY(-3px); box-shadow: var(--shadow-md
   .reveal-line { transition-duration: .5s; }
 
   /* ============================================================
-     Page indicator \u2014 slim vertical rail on the right edge
-     showing which mobile page is in view. Tap to jump.
+     Page indicator — slim vertical rail on the right edge showing
+     which mobile page is in view. Tap to jump.
+
+     Auto-hides so it never obscures content: invisible when idle,
+     fades in briefly while the user is actively scrolling (JS
+     toggles .is-scrolling on <body>), then fades back out ~1s
+     after they stop.
      ============================================================ */
   .page-dots {
     display: flex;
     flex-direction: column;
     gap: 2px;
     position: fixed;
-    right: 6px;
+    right: 4px;
     top: 50%;
     transform: translateY(-50%);
     z-index: 90;
-    padding: 6px 2px;
+    padding: 4px 2px;
     border-radius: 999px;
-    background: rgba(6, 11, 28, .28);
-    -webkit-backdrop-filter: blur(10px);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255,255,255,.08);
-    transition: opacity .3s var(--ease), background .3s var(--ease);
+    background: transparent;
+    border: none;
+    /* Hidden by default so the rail never sits over content. */
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .35s var(--ease);
+  }
+  /* Visible while the user is actively scrolling; fades out again
+     after a short idle window. */
+  body.is-scrolling .page-dots {
+    opacity: 1;
+    pointer-events: auto;
   }
   body.nav-open .page-dots { opacity: 0; pointer-events: none; }
 
-  /* The button itself is a 32×32 tap target for reliable finger
+  /* The button itself is a 28×28 tap target for reliable finger
      accuracy; a smaller visual dot lives inside via ::before so
      the UI still reads as delicate. */
   .page-dot {
-    width: 32px; height: 32px;
+    width: 28px; height: 28px;
     padding: 0;
     background: transparent;
     border: none;
@@ -1578,28 +1590,30 @@ a.contact__item:hover { transform: translateY(-3px); box-shadow: var(--shadow-md
   .page-dot::before {
     content: "";
     display: block;
-    width: 6px; height: 6px;
+    width: 5px; height: 5px;
     border-radius: 50%;
-    background: rgba(255,255,255,.32);
+    background: rgba(255,255,255,.55);
+    box-shadow: 0 0 6px rgba(0,0,0,.4);
     transition: background .25s var(--ease), width .25s var(--ease), height .25s var(--ease), border-radius .25s var(--ease), box-shadow .25s var(--ease);
   }
   .page-dot.is-active::before {
     background: var(--sky);
-    width: 6px;
-    height: 20px;
+    width: 5px;
+    height: 18px;
     border-radius: 3px;
-    box-shadow: 0 0 10px rgba(124,196,255,.6);
+    box-shadow: 0 0 10px rgba(124,196,255,.7);
   }
   .page-dot:active::before { transform: scale(1.4); }
 
   /* On light-background sections the dots invert */
-  body.on-light .page-dots {
-    background: rgba(255,255,255,.75);
-    border-color: rgba(0,0,0,.06);
-    box-shadow: var(--shadow-sm);
+  body.on-light .page-dot::before {
+    background: rgba(15,23,42,.55);
+    box-shadow: 0 0 6px rgba(255,255,255,.7);
   }
-  body.on-light .page-dot::before { background: rgba(15,23,42,.28); }
-  body.on-light .page-dot.is-active::before { background: var(--blue); box-shadow: 0 0 10px rgba(47,123,255,.4); }
+  body.on-light .page-dot.is-active::before {
+    background: var(--blue);
+    box-shadow: 0 0 10px rgba(47,123,255,.5);
+  }
 }
 
 /* Very small phones */
