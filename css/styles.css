@@ -1559,24 +1559,15 @@ a.contact__item:hover { transform: translateY(-3px); box-shadow: var(--shadow-md
     top: 50vh;
     top: 50lvh;
     transform: translateY(-50%);
-    /* Do not transition transform — only fade opacity — so any
-       scroll-driven layout tick can't be animated. */
-    will-change: opacity;
     z-index: 90;
     padding: 4px 2px;
     border-radius: 999px;
     background: transparent;
     border: none;
-    /* Hidden by default so the rail never sits over content. */
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity .35s var(--ease);
-  }
-  /* Visible while the user is actively scrolling; fades out again
-     after a short idle window. */
-  body.is-scrolling .page-dots {
+    /* Always visible on mobile — fixed to middle-right, never moves. */
     opacity: 1;
     pointer-events: auto;
+    transition: opacity .3s var(--ease);
   }
   body.nav-open .page-dots { opacity: 0; pointer-events: none; }
 

@@ -575,26 +575,8 @@
       const t = document.querySelector(d.dataset.target);
       if (!t) return;
       t.scrollIntoView({ behavior: prefersReduced ? 'auto' : 'smooth', block: 'start' });
-      // Keep the rail visible for a beat so the user sees the
-      // active-state animate to the new page.
-      pingScrolling();
     });
   });
-
-  /* On mobile the page-dots rail auto-hides so it never sits on top
-     of content. Show it while the user is actively scrolling; hide
-     again after ~900ms of idle. */
-  let scrollIdleTimer = 0;
-  const pingScrolling = () => {
-    if (!mqPage.matches) return;
-    document.body.classList.add('is-scrolling');
-    clearTimeout(scrollIdleTimer);
-    scrollIdleTimer = setTimeout(() => {
-      document.body.classList.remove('is-scrolling');
-    }, 900);
-  };
-  window.addEventListener('scroll', pingScrolling, { passive: true });
-  window.addEventListener('touchstart', pingScrolling, { passive: true });
 
   // Sections whose visible background is a light color — dots invert here
   const LIGHT_SECTIONS = new Set(['about', 'services', 'contact']);
