@@ -988,6 +988,8 @@ a.contact__item:hover { transform: translateY(-3px); box-shadow: var(--shadow-md
    ============================================================ */
 /* Mobile-only utilities: hidden by default so media queries below can enable them */
 .services__hint { display: none; }
+.why__hint { display: none; }
+.page-dots { display: none; }
 
 @media (max-width: 980px) {
   .about__grid { grid-template-columns: 1fr; }
@@ -1110,32 +1112,87 @@ a.contact__item:hover { transform: translateY(-3px); box-shadow: var(--shadow-md
 }
 
 @media (max-width: 640px) {
-  /* ---------- Layout scale (generous breathing room) ---------- */
-  .section { padding: clamp(80px, 16vw, 110px) 0; }
-  .container { padding: 0 22px; }
-  .section__head { margin-bottom: 48px; }
-  .section__title { font-size: clamp(1.9rem, 8vw, 2.4rem); line-height: 1.1; letter-spacing: -.022em; }
-  .section__subtitle { font-size: .98rem; margin-top: 18px; line-height: 1.6; }
-  .eyebrow { font-size: .68rem; letter-spacing: .2em; margin-bottom: 16px; }
+  /* ============================================================
+     Mobile: page-per-section snap experience
+     Each <section> becomes a distinct 100dvh "page". Users swipe
+     vertically between them, or use the menu to jump directly.
+     ============================================================ */
 
-  /* ---------- Hero ---------- */
-  .hero {
-    padding: calc(112px + env(safe-area-inset-top)) 0 96px;
-    min-height: auto;
+  html {
+    scroll-snap-type: y mandatory;
+    scroll-padding-top: 0;
   }
+  main > section {
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+  }
+  .footer { scroll-snap-align: end; }
+
+  /* Every mobile page shares a common shell: full viewport height,
+     centered content, top padding that clears the fixed nav, and
+     ambient bottom padding for the home indicator. */
+  .hero,
+  .about,
+  .services,
+  .why,
+  .contact {
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: calc(92px + env(safe-area-inset-top)) 0 calc(56px + env(safe-area-inset-bottom));
+  }
+  .contact {
+    /* Form + info together may exceed 100dvh, allow natural flow;
+       snap still catches at section start. */
+    justify-content: flex-start;
+    padding-top: calc(96px + env(safe-area-inset-top));
+    padding-bottom: 40px;
+  }
+
+  .container { padding: 0 24px; }
+
+  /* Subtle "page label" pinned inside each mobile page for orientation */
+  .hero .container::before,
+  .about .container::before,
+  .services .container::before,
+  .why .container::before,
+  .contact .container::before {
+    content: "";
+    display: block;
+  }
+
+  /* Shared type scale */
+  .section__title {
+    font-size: clamp(2rem, 8.5vw, 2.55rem);
+    line-height: 1.06;
+    letter-spacing: -.024em;
+  }
+  .section__subtitle { font-size: .98rem; margin-top: 16px; line-height: 1.6; }
+  .eyebrow { font-size: .68rem; letter-spacing: .22em; margin-bottom: 14px; opacity: .9; }
+  .section__head { margin-bottom: 34px; }
+
+  /* Trust bar removed on mobile \u2014 not essential to the page flow */
+  .trust { display: none !important; }
+
+  /* ============================================================
+     PAGE 1 \u2014 Hero
+     ============================================================ */
+  .hero { padding-top: calc(100px + env(safe-area-inset-top)); }
+  .hero__inner { padding: 0 24px; text-align: center; }
   .hero__title {
-    font-size: clamp(2.3rem, 10.5vw, 3.1rem);
+    font-size: clamp(2.4rem, 11vw, 3.2rem);
     line-height: 1.02;
     letter-spacing: -.028em;
   }
   .hero__eyebrow {
-    font-size: .64rem;
+    font-size: .62rem;
     padding: 6px 14px;
-    margin-bottom: 24px;
-    letter-spacing: .12em;
+    margin-bottom: 22px;
+    letter-spacing: .14em;
   }
   .hero__subtitle {
-    margin-top: 24px;
+    margin-top: 22px;
     font-size: 1rem;
     line-height: 1.6;
     padding: 0 4px;
@@ -1143,141 +1200,254 @@ a.contact__item:hover { transform: translateY(-3px); box-shadow: var(--shadow-md
   .hero__actions {
     flex-direction: column;
     gap: 12px;
-    margin-top: 36px;
+    margin-top: 32px;
     padding: 0 8px;
   }
   .hero__actions .btn { width: 100%; justify-content: center; padding: 16px 26px; font-size: .98rem; }
-  /* Hide highlight pills on mobile \u2014 the value props already live in the copy */
   .hero__highlights { display: none; }
-  .hero__glow--1 { width: 340px; height: 340px; opacity: .32; top: -130px; right: -110px; }
-  .hero__glow--2 { width: 280px; height: 280px; opacity: .32; bottom: -110px; left: -100px; }
-  .hero__grid { background-size: 44px 44px; opacity: .55; }
-  .hero__scroll { display: none; }
+  .hero__glow--1 { width: 340px; height: 340px; opacity: .3; top: -130px; right: -110px; }
+  .hero__glow--2 { width: 280px; height: 280px; opacity: .3; bottom: -110px; left: -100px; }
+  .hero__grid { background-size: 44px 44px; opacity: .5; }
   #network { opacity: .38; }
 
-  /* ---------- Trust: horizontal scroll strip with fade edges ---------- */
-  .trust { padding: 44px 0 48px; }
-  .trust__label { font-size: .64rem; letter-spacing: .22em; margin-bottom: 22px; padding: 0 20px; opacity: .8; }
-  .trust__logos {
+  /* Chevron scroll cue at bottom of hero page */
+  .hero__scroll {
+    display: block !important;
+    bottom: calc(24px + env(safe-area-inset-bottom));
+    z-index: 3;
+  }
+  .hero__scroll-mouse { display: none; }
+  .hero__scroll::after {
+    content: "";
+    display: block;
+    width: 12px; height: 12px;
+    margin: 0 auto;
+    border-right: 2px solid rgba(255,255,255,.55);
+    border-bottom: 2px solid rgba(255,255,255,.55);
+    transform: rotate(45deg);
+    animation: mobileChevron 1.9s ease-in-out infinite;
+  }
+  @keyframes mobileChevron {
+    0%,100% { transform: translateY(0) rotate(45deg); opacity: .5; }
+    50%     { transform: translateY(6px) rotate(45deg); opacity: 1; }
+  }
+
+  /* ============================================================
+     PAGE 2 \u2014 About
+     Restructured: compact eyebrow \u2192 title \u2192 slim illustration
+     \u2192 lead \u2192 3 checkmarks \u2192 CTA. The second paragraph and
+     floating badge are hidden to keep the page airy.
+     ============================================================ */
+  .about {
+    background: linear-gradient(180deg, var(--bg-softer) 0%, #ffffff 100%);
+  }
+  .about__grid {
     display: flex;
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    gap: 40px;
-    padding: 6px 24px 8px;
-    margin: 0 -22px;
-    scroll-snap-type: x proximity;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-    -webkit-mask-image: linear-gradient(90deg, transparent, #000 14%, #000 86%, transparent);
-    mask-image: linear-gradient(90deg, transparent, #000 14%, #000 86%, transparent);
+    flex-direction: column;
+    gap: 22px;
+    grid-template-columns: none;
+    align-items: stretch;
   }
-  .trust__logos::-webkit-scrollbar { display: none; }
-  .trust__logo {
-    flex-shrink: 0;
-    scroll-snap-align: center;
-    font-size: .86rem;
-    letter-spacing: .08em;
-    opacity: .85;
+  .about__media {
+    order: 1;
+    max-width: 200px;
+    margin: 0 auto;
   }
-
-  /* ---------- About ---------- */
-  .about__grid { gap: 48px; }
-  .about__media { max-width: 420px; }
-  .about__badge {
-    left: 12px; bottom: -18px;
-    padding: 12px 16px;
-    border-radius: var(--radius-sm);
+  .about__image { border-radius: var(--radius); box-shadow: var(--shadow-md); }
+  .about__illustration { max-height: 140px; }
+  .about__image-glow { display: none; }
+  .about__badge { display: none; }
+  .about__content { order: 2; text-align: center; }
+  .about__content .eyebrow { margin-bottom: 10px; }
+  .about__content .section__title { font-size: clamp(1.8rem, 7.5vw, 2.15rem); line-height: 1.08; }
+  .about__lead {
+    font-size: 1rem;
+    line-height: 1.5;
+    margin: 14px auto 0;
+    max-width: 34ch;
+  }
+  .about__text { display: none; } /* redundant paragraph on mobile */
+  .about__list {
+    order: 3;
     gap: 12px;
+    margin: 20px auto 0;
+    padding: 0;
+    max-width: 300px;
   }
-  .about__badge-icon { width: 38px; height: 38px; border-radius: 10px; }
-  .about__badge span { font-size: .68rem; letter-spacing: .1em; }
-  .about__lead { font-size: 1.14rem; line-height: 1.45; margin-bottom: 16px; }
-  .about__text { font-size: .96rem; margin-bottom: 22px; }
-  .about__list { gap: 12px; margin-bottom: 26px; }
-  .about__list li { font-size: .93rem; align-items: flex-start; line-height: 1.5; }
-  .about__list svg { margin-top: 2px; }
+  .about__list li {
+    font-size: .9rem;
+    align-items: flex-start;
+    justify-content: flex-start;
+    line-height: 1.4;
+    gap: 12px;
+    text-align: left;
+  }
+  .about__list svg { margin: 1px 0 0; flex-shrink: 0; }
+  .about .btn--dark {
+    order: 4;
+    align-self: center;
+    margin-top: 22px;
+    padding: 14px 28px;
+  }
 
-  /* ---------- Services: swipeable snap carousel ---------- */
+  /* ============================================================
+     PAGE 3 \u2014 Services
+     Title area + horizontal swipe carousel of the 6 service cards.
+     ============================================================ */
+  .services { background: #fff; }
   .services__grid {
     display: flex;
     grid-template-columns: none;
     gap: 14px;
     overflow-x: auto;
     scroll-snap-type: x mandatory;
-    scroll-padding-inline: 20px;
-    padding: 8px 20px 24px;
-    margin: 0 -20px -8px;
+    scroll-padding-inline: 24px;
+    padding: 4px 24px 20px;
+    margin: 0 -24px -4px;
     scrollbar-width: none;
     -ms-overflow-style: none;
     -webkit-overflow-scrolling: touch;
+    overscroll-behavior-x: contain;
   }
   .services__grid::-webkit-scrollbar { display: none; }
   .services__grid::before,
-  .services__grid::after {
-    content: "";
-    flex: 0 0 4px;
-  }
+  .services__grid::after { content: ""; flex: 0 0 2px; }
   .service {
     flex: 0 0 82%;
     max-width: 340px;
-    padding: 30px 26px;
+    padding: 28px 24px;
     scroll-snap-align: center;
     scroll-snap-stop: always;
-    transform: none !important; /* neutralize desktop tilt hover */
+    transform: none !important;
   }
   .service:hover { transform: none; }
-  .service::after { display: none; } /* skip cursor spotlight on touch */
-  .service__icon { width: 52px; height: 52px; margin-bottom: 18px; }
-  .service__title { font-size: 1.14rem; }
-  .service__text { font-size: .93rem; line-height: 1.55; }
+  .service::after { display: none; }
+  .service__icon { width: 50px; height: 50px; margin-bottom: 16px; }
+  .service__title { font-size: 1.1rem; }
+  .service__text { font-size: .92rem; line-height: 1.55; }
+
   .services__hint {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 8px;
-    margin-top: 12px;
+    gap: 10px;
+    margin-top: 14px;
     font-family: var(--font-mono);
-    font-size: .66rem;
-    letter-spacing: .22em;
+    font-size: .64rem;
+    letter-spacing: .24em;
     text-transform: uppercase;
     color: var(--muted);
-    opacity: .7;
+    opacity: .75;
   }
   .services__hint::after {
     content: "\2192";
     font-family: var(--font-body);
     letter-spacing: 0;
-    font-size: .9rem;
+    font-size: .95rem;
     opacity: .6;
   }
 
-  /* ---------- Why cards ---------- */
-  .why__grid { grid-template-columns: 1fr; gap: 16px; }
-  .why__card { padding: 28px 24px; border-radius: var(--radius); }
-  .why__icon { width: 46px; height: 46px; border-radius: 12px; margin-bottom: 18px; }
-  .why__card h3 { font-size: 1.08rem; margin-bottom: 8px; }
-  .why__card p { font-size: .92rem; line-height: 1.6; }
-  .why__card--cta { padding: 32px 26px; align-items: stretch; }
-  .why__card--cta h3 { font-size: 1.4rem; }
-  .why__card--cta .btn { align-self: flex-start; }
+  /* ============================================================
+     PAGE 4 \u2014 Why
+     Horizontal swipe carousel of the 5 reasons + CTA card.
+     ============================================================ */
+  .why { justify-content: center; }
+  .why__grid {
+    display: flex;
+    grid-template-columns: none;
+    gap: 14px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: 24px;
+    padding: 4px 24px 20px;
+    margin: 0 -24px -4px;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-x: contain;
+  }
+  .why__grid::-webkit-scrollbar { display: none; }
+  .why__grid::before,
+  .why__grid::after { content: ""; flex: 0 0 2px; }
+  .why__card {
+    flex: 0 0 84%;
+    max-width: 340px;
+    padding: 28px 24px;
+    scroll-snap-align: center;
+    scroll-snap-stop: always;
+    border-radius: var(--radius);
+    display: flex;
+    flex-direction: column;
+  }
+  .why__card:hover { transform: none; }
+  .why__card::after { display: none; }
+  .why__icon { width: 46px; height: 46px; border-radius: 12px; margin-bottom: 16px; }
+  .why__card h3 { font-size: 1.06rem; margin-bottom: 8px; }
+  .why__card p { font-size: .92rem; line-height: 1.55; }
+  .why__card--cta {
+    padding: 30px 26px;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .why__card--cta h3 { font-size: 1.35rem; margin-bottom: 4px; }
+  .why__card--cta .btn { margin-top: 8px; }
 
-  /* ---------- Contact ---------- */
-  .contact__cards { gap: 12px; margin-bottom: 26px; }
-  .contact__item { padding: 16px 18px; gap: 14px; border-radius: var(--radius-sm); }
+  /* Reuse the same "swipe" hint pattern under why */
+  .why__hint {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-top: 14px;
+    font-family: var(--font-mono);
+    font-size: .64rem;
+    letter-spacing: .24em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,.55);
+    opacity: .85;
+  }
+  .why__hint::after {
+    content: "\2192";
+    font-family: var(--font-body);
+    letter-spacing: 0;
+    font-size: .95rem;
+    opacity: .7;
+  }
+
+  /* ============================================================
+     PAGE 5 \u2014 Contact (info + form)
+     Section is longer than 100dvh; snap catches at its top and
+     users scroll through info \u2192 form naturally.
+     ============================================================ */
+  .contact__grid {
+    display: flex;
+    flex-direction: column;
+    gap: 26px;
+    grid-template-columns: none;
+  }
+  .contact__cards { gap: 10px; margin-bottom: 0; }
+  .contact__item { padding: 14px 16px; gap: 14px; border-radius: var(--radius-sm); }
   .contact__item-icon { width: 40px; height: 40px; border-radius: 10px; }
   .contact__item-body small { font-size: .62rem; letter-spacing: .16em; }
   .contact__item-body strong { font-size: .94rem; }
-  .contact__map { display: none; } /* hide decorative map on phones to reduce noise */
+  .contact__map { display: none; }
   .field-row { grid-template-columns: 1fr; gap: 0; }
   .contact__form { padding: 24px 20px; border-radius: var(--radius); }
   .contact__form-note { font-size: .78rem; }
 
-  /* ---------- Footer ---------- */
-  .footer { padding: 56px 0 calc(28px + env(safe-area-inset-bottom)); }
-  .footer__inner { grid-template-columns: 1fr; gap: 34px; padding-bottom: 32px; }
-  .footer__tagline { max-width: none; }
-  .footer__col h4 { margin-bottom: 14px; }
-  .footer__col a, .footer__col span { margin-bottom: 10px; font-size: .9rem; }
+  /* ============================================================
+     PAGE 6 \u2014 Footer
+     Compact, single column, snaps to end.
+     ============================================================ */
+  .footer {
+    padding: 44px 0 calc(28px + env(safe-area-inset-bottom));
+    min-height: auto;
+  }
+  .footer__inner { grid-template-columns: 1fr; gap: 28px; padding-bottom: 26px; }
+  .footer__tagline { max-width: none; font-size: .92rem; }
+  .footer__col h4 { margin-bottom: 12px; }
+  .footer__col a, .footer__col span { margin-bottom: 8px; font-size: .9rem; }
   .footer__bottom {
     flex-direction: column;
     align-items: flex-start;
@@ -1286,15 +1456,59 @@ a.contact__item:hover { transform: translateY(-3px); box-shadow: var(--shadow-md
   }
   .footer__legal { flex-wrap: wrap; gap: 14px; }
 
-  .back-to-top {
-    bottom: calc(20px + env(safe-area-inset-bottom));
-    right: 16px;
-    width: 44px; height: 44px;
-  }
+  /* Back-to-top disabled on mobile \u2014 nav overlay already gives
+     instant access to Home */
+  .back-to-top { display: none; }
 
   /* ---------- Section reveal: softer, faster on mobile ---------- */
-  [data-reveal] { transform: translateY(20px); transition-duration: .6s; }
-  .reveal-line { transition-duration: .55s; }
+  [data-reveal] { transform: translateY(16px); transition-duration: .55s; }
+  .reveal-line { transition-duration: .5s; }
+
+  /* ============================================================
+     Page indicator \u2014 slim vertical rail on the right edge
+     showing which mobile page is in view. Tap to jump.
+     ============================================================ */
+  .page-dots {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    position: fixed;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 90;
+    padding: 10px 6px;
+    border-radius: 999px;
+    background: rgba(6, 11, 28, .28);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,.08);
+    transition: opacity .3s var(--ease);
+  }
+  body.nav-open .page-dots { opacity: 0; pointer-events: none; }
+  .page-dot {
+    width: 6px; height: 6px;
+    padding: 0;
+    border-radius: 50%;
+    background: rgba(255,255,255,.28);
+    border: none;
+    cursor: pointer;
+    transition: background .25s var(--ease), height .25s var(--ease), transform .25s var(--ease);
+  }
+  .page-dot.is-active {
+    background: var(--sky);
+    height: 18px;
+    border-radius: 3px;
+    box-shadow: 0 0 10px rgba(124,196,255,.6);
+  }
+  /* On light-background sections the dots invert */
+  body.on-light .page-dots {
+    background: rgba(255,255,255,.75);
+    border-color: rgba(0,0,0,.06);
+    box-shadow: var(--shadow-sm);
+  }
+  body.on-light .page-dot { background: rgba(15,23,42,.24); }
+  body.on-light .page-dot.is-active { background: var(--blue); box-shadow: 0 0 10px rgba(47,123,255,.4); }
 }
 
 /* Very small phones */

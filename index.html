@@ -340,6 +340,8 @@
             <a href="#contact" class="btn btn--primary">Get a Quote</a>
           </article>
         </div>
+
+        <p class="why__hint" aria-hidden="true">Swipe to explore</p>
       </div>
     </section>
 
@@ -489,6 +491,15 @@
   <button class="back-to-top" id="backToTop" aria-label="Back to top">
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 19V5M6 11l6-6 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
   </button>
+
+  <!-- Mobile page indicator (right-side rail, hidden on desktop via CSS) -->
+  <nav class="page-dots" id="pageDots" aria-label="Page navigation">
+    <button type="button" class="page-dot" data-target="#hero" aria-label="Home"></button>
+    <button type="button" class="page-dot" data-target="#about" aria-label="About"></button>
+    <button type="button" class="page-dot" data-target="#services" aria-label="Services"></button>
+    <button type="button" class="page-dot" data-target="#why" aria-label="Why Us"></button>
+    <button type="button" class="page-dot" data-target="#contact" aria-label="Contact"></button>
+  </nav>
 
   <script src="js/main.js"></script>
 </body>

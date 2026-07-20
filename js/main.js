@@ -173,6 +173,7 @@
   }
 
   /* ---------- Smooth scroll for in-page anchors ---------- */
+  const mqPage = window.matchMedia('(max-width: 640px)');
   $$('a[href^="#"]').forEach((link) => {
     link.addEventListener('click', (e) => {
       const id = link.getAttribute('href');
@@ -180,6 +181,12 @@
       const target = document.querySelector(id);
       if (!target) return;
       e.preventDefault();
+      if (mqPage.matches) {
+        // On the mobile page-per-section layout, sections have their
+        // own top padding to clear the fixed nav, so scroll flush to top.
+        target.scrollIntoView({ behavior: prefersReduced ? 'auto' : 'smooth', block: 'start' });
+        return;
+      }
       const offset = 76;
       const top = target.getBoundingClientRect().top + window.scrollY - offset;
       window.scrollTo({ top, behavior: prefersReduced ? 'auto' : 'smooth' });
@@ -526,6 +533,21 @@
   const sections = $$('main section[id]');
   const navMap = {};
   $$('.nav__link').forEach((l) => { navMap[l.getAttribute('href')] = l; });
+
+  /* ---------- Mobile page dots + light-section theme tracking ---------- */
+  const pageDots = $$('.page-dot');
+  const dotMap = {};
+  pageDots.forEach((d) => { dotMap[d.dataset.target] = d; });
+  pageDots.forEach((d) => {
+    d.addEventListener('click', () => {
+      const t = document.querySelector(d.dataset.target);
+      if (!t) return;
+      t.scrollIntoView({ behavior: prefersReduced ? 'auto' : 'smooth', block: 'start' });
+    });
+  });
+  // Sections whose visible background is a light color \u2014 dots invert here
+  const LIGHT_SECTIONS = new Set(['about', 'services', 'contact']);
+
   if ('IntersectionObserver' in window) {
     const secObs = new IntersectionObserver((entries) => {
       entries.forEach((e) => {
@@ -533,6 +555,15 @@
           $$('.nav__link').forEach((l) => l.classList.remove('is-active'));
           const link = navMap['#' + e.target.id];
           if (link) link.classList.add('is-active');
+
+          // Mobile page dots
+          pageDots.forEach((d) => d.classList.remove('is-active'));
+          const dot = dotMap['#' + e.target.id];
+          if (dot) dot.classList.add('is-active');
+
+          // Toggle light/dark theme for the page-dot rail
+          if (LIGHT_SECTIONS.has(e.target.id)) document.body.classList.add('on-light');
+          else document.body.classList.remove('on-light');
         }
       });
     }, { threshold: 0.5 });
