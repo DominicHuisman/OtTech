@@ -1008,7 +1008,16 @@ a.contact__item:hover { transform: translateY(-3px); box-shadow: var(--shadow-md
 
   .nav__links {
     position: fixed;
-    inset: 0;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    /* Explicit dvh sizing so the overlay always fills the visible
+       viewport, regardless of how far the page has been scrolled
+       or which snap-page is currently in view. */
+    width: 100vw;
+    height: 100vh;
+    height: 100dvh;
     z-index: 120;
     display: flex;
     flex-direction: column;
@@ -1033,9 +1042,10 @@ a.contact__item:hover { transform: translateY(-3px); box-shadow: var(--shadow-md
     transform: translateY(-102%);
     opacity: 0;
     pointer-events: none;
-    transition: transform .6s var(--ease), opacity .45s var(--ease);
+    transition: transform .55s var(--ease), opacity .4s var(--ease);
     overflow-y: auto;
     overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
   }
   .nav__links.is-open { transform: translateY(0); opacity: 1; pointer-events: auto; }
 
@@ -1116,17 +1126,31 @@ a.contact__item:hover { transform: translateY(-3px); box-shadow: var(--shadow-md
      Mobile: page-per-section snap experience
      Each <section> becomes a distinct 100dvh "page". Users swipe
      vertically between them, or use the menu to jump directly.
+
+     We use `proximity` snap (not `mandatory`) so pages that are
+     taller than the viewport — e.g. the contact form — scroll
+     naturally through the whole content and only snap softly when
+     the user is near the next section boundary.
      ============================================================ */
 
   html {
-    scroll-snap-type: y mandatory;
+    scroll-snap-type: y proximity;
     scroll-padding-top: 0;
   }
   main > section {
     scroll-snap-align: start;
-    scroll-snap-stop: always;
+    scroll-snap-stop: normal;
   }
+  /* Contact contains the form which routinely exceeds 100dvh; opt
+     that page out of snap entirely so users can scroll freely. */
+  #contact { scroll-snap-align: none; }
   .footer { scroll-snap-align: end; }
+
+  /* When the mobile menu is open, disable snap globally so the
+     fixed overlay layer is never affected by scroll snapping and
+     the body is locked cleanly. */
+  body.nav-open { overflow: hidden !important; touch-action: none; }
+  body.nav-open, body.nav-open html { scroll-snap-type: none !important; }
 
   /* Every mobile page shares a common shell: full viewport height,
      centered content, top padding that clears the fixed nav, and
@@ -1134,8 +1158,7 @@ a.contact__item:hover { transform: translateY(-3px); box-shadow: var(--shadow-md
   .hero,
   .about,
   .services,
-  .why,
-  .contact {
+  .why {
     min-height: 100dvh;
     display: flex;
     flex-direction: column;
@@ -1143,11 +1166,11 @@ a.contact__item:hover { transform: translateY(-3px); box-shadow: var(--shadow-md
     padding: calc(92px + env(safe-area-inset-top)) 0 calc(56px + env(safe-area-inset-bottom));
   }
   .contact {
-    /* Form + info together may exceed 100dvh, allow natural flow;
-       snap still catches at section start. */
-    justify-content: flex-start;
-    padding-top: calc(96px + env(safe-area-inset-top));
-    padding-bottom: 40px;
+    /* Contact intentionally flows naturally so the info cards and
+       form can all be reached with normal scrolling. */
+    min-height: auto;
+    display: block;
+    padding: calc(96px + env(safe-area-inset-top)) 0 56px;
   }
 
   .container { padding: 0 24px; }
