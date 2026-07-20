@@ -35,12 +35,23 @@
       const open = navLinks.classList.toggle('is-open');
       navToggle.classList.toggle('is-open', open);
       navToggle.setAttribute('aria-expanded', String(open));
+      document.body.classList.toggle('nav-open', open);
     });
     navLinks.addEventListener('click', (e) => {
       if (e.target.closest('a')) {
         navLinks.classList.remove('is-open');
         navToggle.classList.remove('is-open');
         navToggle.setAttribute('aria-expanded', 'false');
+        document.body.classList.remove('nav-open');
+      }
+    });
+    // Escape key closes the mobile overlay
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && navLinks.classList.contains('is-open')) {
+        navLinks.classList.remove('is-open');
+        navToggle.classList.remove('is-open');
+        navToggle.setAttribute('aria-expanded', 'false');
+        document.body.classList.remove('nav-open');
       }
     });
   }
@@ -48,6 +59,8 @@
   /* ---------- Scroll progress + back-to-top ---------- */
   const progress = $('#scrollProgress');
   const backToTop = $('#backToTop');
+  const mobileBar = $('#mobileBar');
+  const mqMobile = window.matchMedia('(max-width: 640px)');
 
   const onScroll = () => {
     onScrollNav();
@@ -56,6 +69,11 @@
     const pct = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
     if (progress) progress.style.width = pct + '%';
     if (backToTop) backToTop.classList.toggle('is-visible', scrollTop > 600);
+    if (mobileBar && mqMobile.matches) {
+      mobileBar.classList.toggle('is-visible', scrollTop > 320);
+    } else if (mobileBar) {
+      mobileBar.classList.remove('is-visible');
+    }
   };
   window.addEventListener('scroll', onScroll, { passive: true });
   onScroll();
@@ -286,6 +304,7 @@
     const constellations = [];
 
     const config = () => {
+      if (width < 640) return 22; // lighter density on phones
       const area = window.innerWidth * window.innerHeight;
       return Math.min(Math.max(Math.floor(area / 12000), 40), 120);
     };
@@ -300,12 +319,17 @@
 
     const buildConstellations = () => {
       constellations.length = 0;
+      const isSmall = width < 640;
       // Scale count with viewport size (roughly 1 per 220k px^2)
-      const target = Math.min(Math.max(Math.round((width * height) / 220000), 3), 8);
+      const target = isSmall
+        ? Math.min(Math.max(Math.round((width * height) / 260000), 2), 3)
+        : Math.min(Math.max(Math.round((width * height) / 220000), 3), 8);
       const shuffled = CONSTELLATIONS.slice().sort(() => Math.random() - 0.5);
       for (let i = 0; i < target; i++) {
         const shape = shuffled[i % shuffled.length];
-        const scale = 60 + Math.random() * 70; // 60–130px radius
+        const scale = isSmall
+          ? 42 + Math.random() * 34   // 42–76px on phones
+          : 60 + Math.random() * 70;  // 60–130px otherwise
         const pad = scale + 20;
         const cx = pad + Math.random() * Math.max(1, width - pad * 2);
         const cy = pad + Math.random() * Math.max(1, height - pad * 2);
