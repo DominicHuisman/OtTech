@@ -31,28 +31,60 @@
   onScrollNav();
 
   if (navToggle && navLinks) {
+    // iOS-safe scroll lock: save the current scroll position, pin the
+    // body with position:fixed while the menu is open, then restore
+    // the exact scroll position on close. Prevents jolt/rubber-band
+    // and preserves where the user was in the page.
+    let savedScrollY = 0;
+    const openMenu = () => {
+      savedScrollY = window.scrollY || window.pageYOffset || 0;
+      document.body.style.top = `-${savedScrollY}px`;
+      document.body.style.position = 'fixed';
+      document.body.style.width = '100%';
+      document.body.classList.add('nav-open');
+      navLinks.classList.add('is-open');
+      navToggle.classList.add('is-open');
+      navToggle.setAttribute('aria-expanded', 'true');
+    };
+    const closeMenu = () => {
+      navLinks.classList.remove('is-open');
+      navToggle.classList.remove('is-open');
+      navToggle.setAttribute('aria-expanded', 'false');
+      document.body.classList.remove('nav-open');
+      document.body.style.position = '';
+      document.body.style.top = '';
+      document.body.style.width = '';
+      // Force instant restore — html { scroll-behavior: smooth }
+      // would otherwise animate the jump and drift the final position.
+      const prevBehavior = document.documentElement.style.scrollBehavior;
+      document.documentElement.style.scrollBehavior = 'auto';
+      window.scrollTo(0, savedScrollY);
+      document.documentElement.style.scrollBehavior = prevBehavior;
+    };
+
     navToggle.addEventListener('click', () => {
-      const open = navLinks.classList.toggle('is-open');
-      navToggle.classList.toggle('is-open', open);
-      navToggle.setAttribute('aria-expanded', String(open));
-      document.body.classList.toggle('nav-open', open);
+      if (navLinks.classList.contains('is-open')) closeMenu();
+      else openMenu();
     });
     navLinks.addEventListener('click', (e) => {
-      if (e.target.closest('a')) {
-        navLinks.classList.remove('is-open');
-        navToggle.classList.remove('is-open');
-        navToggle.setAttribute('aria-expanded', 'false');
-        document.body.classList.remove('nav-open');
+      const link = e.target.closest('a');
+      if (!link) return;
+      // Close first so scroll position is restored, then jump.
+      const href = link.getAttribute('href');
+      closeMenu();
+      if (href && href.startsWith('#')) {
+        e.preventDefault();
+        // Wait one frame so layout settles after unlocking the body,
+        // then scroll to the target section.
+        requestAnimationFrame(() => {
+          const target = document.querySelector(href);
+          if (target) target.scrollIntoView({ behavior: prefersReduced ? 'auto' : 'smooth', block: 'start' });
+        });
       }
     });
     // Escape key closes the mobile overlay
     document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && navLinks.classList.contains('is-open')) {
-        navLinks.classList.remove('is-open');
-        navToggle.classList.remove('is-open');
-        navToggle.setAttribute('aria-expanded', 'false');
-        document.body.classList.remove('nav-open');
-      }
+      if (e.key === 'Escape' && navLinks.classList.contains('is-open')) closeMenu();
     });
   }
 
@@ -545,8 +577,23 @@
       t.scrollIntoView({ behavior: prefersReduced ? 'auto' : 'smooth', block: 'start' });
     });
   });
-  // Sections whose visible background is a light color \u2014 dots invert here
+  // Sections whose visible background is a light color — dots invert here
   const LIGHT_SECTIONS = new Set(['about', 'services', 'contact']);
+  // Theme-color per section so the mobile status bar / safe-area
+  // matches what's actually on screen instead of flashing white.
+  const themeMeta = document.getElementById('themeColor');
+  const THEME_COLORS = {
+    hero: '#060b1c',
+    about: '#fbfcfe',
+    services: '#ffffff',
+    why: '#060b1c',
+    contact: '#fbfcfe'
+  };
+  const setTheme = (id) => {
+    if (!themeMeta) return;
+    const c = THEME_COLORS[id];
+    if (c) themeMeta.setAttribute('content', c);
+  };
 
   if ('IntersectionObserver' in window) {
     const secObs = new IntersectionObserver((entries) => {
@@ -564,6 +611,9 @@
           // Toggle light/dark theme for the page-dot rail
           if (LIGHT_SECTIONS.has(e.target.id)) document.body.classList.add('on-light');
           else document.body.classList.remove('on-light');
+
+          // Sync the browser chrome theme-color meta
+          setTheme(e.target.id);
         }
       });
     }, { threshold: 0.5 });

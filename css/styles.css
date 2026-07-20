@@ -59,6 +59,10 @@
 html {
   scroll-behavior: smooth;
   -webkit-text-size-adjust: 100%;
+  /* Dark background under the viewport so the iOS/Android status bar
+     and home-indicator safe-areas match the hero rather than flashing
+     white during overscroll or URL-bar transitions. */
+  background-color: #060b1c;
 }
 
 body {
@@ -72,6 +76,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
+  -webkit-tap-highlight-color: transparent;
 }
 
 img, svg { display: block; max-width: 100%; }
@@ -1133,24 +1138,18 @@ a.contact__item:hover { transform: translateY(-3px); box-shadow: var(--shadow-md
      the user is near the next section boundary.
      ============================================================ */
 
+  /* Scroll snap removed on mobile — it caused jolty/glitchy feel
+     when tapping the burger or scrolling long sections. Sections
+     still occupy 100dvh so they read as distinct "pages", but the
+     scroll itself is now smooth and free. */
   html {
-    scroll-snap-type: y proximity;
     scroll-padding-top: 0;
   }
-  main > section {
-    scroll-snap-align: start;
-    scroll-snap-stop: normal;
-  }
-  /* Contact contains the form which routinely exceeds 100dvh; opt
-     that page out of snap entirely so users can scroll freely. */
-  #contact { scroll-snap-align: none; }
-  .footer { scroll-snap-align: end; }
 
-  /* When the mobile menu is open, disable snap globally so the
-     fixed overlay layer is never affected by scroll snapping and
-     the body is locked cleanly. */
-  body.nav-open { overflow: hidden !important; touch-action: none; }
-  body.nav-open, body.nav-open html { scroll-snap-type: none !important; }
+  /* When the mobile menu is open, lock the body cleanly. We pair
+     this with the JS position-fixed technique so iOS Safari doesn't
+     lose the user's scroll position on close. */
+  body.nav-open { overflow: hidden; }
 
   /* Every mobile page shares a common shell: full viewport height,
      centered content, top padding that clears the fixed nav, and
@@ -1494,44 +1493,62 @@ a.contact__item:hover { transform: translateY(-3px); box-shadow: var(--shadow-md
   .page-dots {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 2px;
     position: fixed;
-    right: 12px;
+    right: 6px;
     top: 50%;
     transform: translateY(-50%);
     z-index: 90;
-    padding: 10px 6px;
+    padding: 6px 2px;
     border-radius: 999px;
     background: rgba(6, 11, 28, .28);
     -webkit-backdrop-filter: blur(10px);
     backdrop-filter: blur(10px);
     border: 1px solid rgba(255,255,255,.08);
-    transition: opacity .3s var(--ease);
+    transition: opacity .3s var(--ease), background .3s var(--ease);
   }
   body.nav-open .page-dots { opacity: 0; pointer-events: none; }
+
+  /* The button itself is a 32×32 tap target for reliable finger
+     accuracy; a smaller visual dot lives inside via ::before so
+     the UI still reads as delicate. */
   .page-dot {
-    width: 6px; height: 6px;
+    width: 32px; height: 32px;
     padding: 0;
-    border-radius: 50%;
-    background: rgba(255,255,255,.28);
+    background: transparent;
     border: none;
     cursor: pointer;
-    transition: background .25s var(--ease), height .25s var(--ease), transform .25s var(--ease);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    -webkit-tap-highlight-color: transparent;
   }
-  .page-dot.is-active {
+  .page-dot::before {
+    content: "";
+    display: block;
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: rgba(255,255,255,.32);
+    transition: background .25s var(--ease), width .25s var(--ease), height .25s var(--ease), border-radius .25s var(--ease), box-shadow .25s var(--ease);
+  }
+  .page-dot.is-active::before {
     background: var(--sky);
-    height: 18px;
+    width: 6px;
+    height: 20px;
     border-radius: 3px;
     box-shadow: 0 0 10px rgba(124,196,255,.6);
   }
+  .page-dot:active::before { transform: scale(1.4); }
+
   /* On light-background sections the dots invert */
   body.on-light .page-dots {
     background: rgba(255,255,255,.75);
     border-color: rgba(0,0,0,.06);
     box-shadow: var(--shadow-sm);
   }
-  body.on-light .page-dot { background: rgba(15,23,42,.24); }
-  body.on-light .page-dot.is-active { background: var(--blue); box-shadow: 0 0 10px rgba(47,123,255,.4); }
+  body.on-light .page-dot::before { background: rgba(15,23,42,.28); }
+  body.on-light .page-dot.is-active::before { background: var(--blue); box-shadow: 0 0 10px rgba(47,123,255,.4); }
 }
 
 /* Very small phones */
