@@ -1552,14 +1552,12 @@ a.contact__item:hover { transform: translateY(-3px); box-shadow: var(--shadow-md
     gap: 2px;
     position: fixed;
     right: 4px;
-    /* Position via bottom + translateY instead of top: 50%. On iOS
-       Safari, `top` values (even in lvh) can recompute during
-       URL-bar collapse and make the rail visually slide during
-       vertical scroll. Using `bottom` against the layout viewport
-       plus a fixed translate keeps the rail rock-still. */
-    bottom: 50%;
-    top: auto;
-    transform: translateY(50%);
+    /* JS keeps `top` in sync with the visual viewport center on
+       mobile so the rail stays glued to the same on-screen spot
+       as iOS Safari's URL bar animates. Fallback centers via top
+       for non-JS/desktop. */
+    top: 50%;
+    transform: translateY(-50%);
     z-index: 90;
     padding: 4px 2px;
     border-radius: 999px;

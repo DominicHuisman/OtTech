@@ -568,6 +568,7 @@
 
   /* ---------- Mobile page dots + light-section theme tracking ---------- */
   const pageDots = $$('.page-dot');
+  const pageDotsRail = $('.page-dots');
   const dotMap = {};
   pageDots.forEach((d) => { dotMap[d.dataset.target] = d; });
   pageDots.forEach((d) => {
@@ -578,6 +579,32 @@
       pingVerticalScroll();
     });
   });
+
+  /* Lock the page-dots rail to the exact visual center of the
+     device screen. On iOS Safari, position: fixed elements are
+     anchored to the layout viewport but what the user actually
+     sees is the visual viewport, which shifts as the URL bar
+     animates during scroll. Without this compensation the rail
+     appears to slide up and down. Using window.visualViewport
+     we can measure the true visible area and keep the rail
+     glued to the middle of it. */
+  const pinRailToVisualCenter = () => {
+    if (!pageDotsRail || !mqPage.matches) return;
+    const vv = window.visualViewport;
+    if (vv) {
+      const centerY = vv.offsetTop + vv.height / 2;
+      pageDotsRail.style.top = centerY + 'px';
+    } else {
+      pageDotsRail.style.top = '50%';
+    }
+  };
+  pinRailToVisualCenter();
+  if (window.visualViewport) {
+    window.visualViewport.addEventListener('resize', pinRailToVisualCenter);
+    window.visualViewport.addEventListener('scroll', pinRailToVisualCenter);
+  }
+  window.addEventListener('resize', pinRailToVisualCenter);
+  window.addEventListener('orientationchange', pinRailToVisualCenter);
 
   /* Vertical-only auto-hide for the page-dots rail. We listen to
      window scroll (which fires for vertical page scrolling) and
@@ -599,6 +626,10 @@
     if (y !== lastScrollY) {
       lastScrollY = y;
       pingVerticalScroll();
+      /* Re-pin on scroll because iOS Safari's URL bar collapse
+         is driven by scroll and the visualViewport dimensions
+         change mid-scroll. */
+      pinRailToVisualCenter();
     }
   }, { passive: true });
 
