@@ -144,19 +144,11 @@
     $$('.reveal-line').forEach((el) => el.classList.add('is-visible'));
   }
 
-  /* ---------- Immersive: magnetic buttons ---------- */
-  if (!prefersReduced && window.matchMedia('(pointer: fine)').matches) {
-    $$('.btn--primary, .btn--ghost, .btn--dark').forEach((btn) => {
-      const strength = 0.35;
-      btn.addEventListener('mousemove', (e) => {
-        const r = btn.getBoundingClientRect();
-        const x = (e.clientX - r.left - r.width / 2) * strength;
-        const y = (e.clientY - r.top - r.height / 2) * strength;
-        btn.style.transform = `translate(${x}px, ${y - 2}px)`;
-      });
-      btn.addEventListener('mouseleave', () => { btn.style.transform = ''; });
-    });
-  }
+  /* ---------- Buttons: CSS-only hover animation ----------
+     (The previous magnetic mouse-tracking behavior was replaced
+     with a cleaner fill-from-left reveal + shine sweep handled
+     entirely in CSS. This keeps the interaction predictable and
+     avoids the button drifting away from the cursor.) */
 
   /* ---------- Immersive: 3D tilt + spotlight tracking ---------- */
   if (!prefersReduced && window.matchMedia('(pointer: fine)').matches) {
