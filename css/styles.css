@@ -63,9 +63,6 @@ html {
      and home-indicator safe-areas match the hero rather than flashing
      white during overscroll or URL-bar transitions. */
   background-color: #060b1c;
-  /* Hint the UA that our chrome is dark so form controls, scrollbars,
-     and (on iOS) the status/URL bar area render in a dark palette. */
-  color-scheme: dark;
 }
 
 body {

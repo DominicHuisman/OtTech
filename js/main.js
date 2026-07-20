@@ -579,21 +579,6 @@
   });
   // Sections whose visible background is a light color — dots invert here
   const LIGHT_SECTIONS = new Set(['about', 'services', 'contact']);
-  // Theme-color per section so the mobile status bar / safe-area
-  // matches what's actually on screen instead of flashing white.
-  const themeMeta = document.getElementById('themeColor');
-  const THEME_COLORS = {
-    hero: '#060b1c',
-    about: '#fbfcfe',
-    services: '#ffffff',
-    why: '#060b1c',
-    contact: '#fbfcfe'
-  };
-  const setTheme = (id) => {
-    if (!themeMeta) return;
-    const c = THEME_COLORS[id];
-    if (c) themeMeta.setAttribute('content', c);
-  };
 
   if ('IntersectionObserver' in window) {
     const secObs = new IntersectionObserver((entries) => {
@@ -611,9 +596,6 @@
           // Toggle light/dark theme for the page-dot rail
           if (LIGHT_SECTIONS.has(e.target.id)) document.body.classList.add('on-light');
           else document.body.classList.remove('on-light');
-
-          // Sync the browser chrome theme-color meta
-          setTheme(e.target.id);
         }
       });
     }, { threshold: 0.5 });
