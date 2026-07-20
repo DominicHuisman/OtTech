@@ -1552,22 +1552,27 @@ a.contact__item:hover { transform: translateY(-3px); box-shadow: var(--shadow-md
     gap: 2px;
     position: fixed;
     right: 4px;
-    /* Use large-viewport-height so the rail stays anchored to the
-       middle of the screen even as iOS Safari's URL bar shows and
-       hides. `top: 50%` would recompute as the viewport height
-       animates, making the rail visibly slide during scroll. */
-    top: 50vh;
-    top: 50lvh;
-    transform: translateY(-50%);
+    /* Position via bottom + translateY instead of top: 50%. On iOS
+       Safari, `top` values (even in lvh) can recompute during
+       URL-bar collapse and make the rail visually slide during
+       vertical scroll. Using `bottom` against the layout viewport
+       plus a fixed translate keeps the rail rock-still. */
+    bottom: 50%;
+    top: auto;
+    transform: translateY(50%);
     z-index: 90;
     padding: 4px 2px;
     border-radius: 999px;
     background: transparent;
     border: none;
-    /* Always visible on mobile — fixed to middle-right, never moves. */
+    /* Hidden by default; fades in only during vertical scroll. */
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .35s var(--ease);
+  }
+  body.is-scrolling .page-dots {
     opacity: 1;
     pointer-events: auto;
-    transition: opacity .3s var(--ease);
   }
   body.nav-open .page-dots { opacity: 0; pointer-events: none; }
 

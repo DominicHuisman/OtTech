@@ -575,8 +575,32 @@
       const t = document.querySelector(d.dataset.target);
       if (!t) return;
       t.scrollIntoView({ behavior: prefersReduced ? 'auto' : 'smooth', block: 'start' });
+      pingVerticalScroll();
     });
   });
+
+  /* Vertical-only auto-hide for the page-dots rail. We listen to
+     window scroll (which fires for vertical page scrolling) and
+     compare against the last known scrollY. Horizontal swipes on
+     the services carousel don't move window.scrollY, so they
+     don't trigger the fade-in. */
+  let lastScrollY = window.scrollY;
+  let scrollIdleTimer = 0;
+  const pingVerticalScroll = () => {
+    if (!mqPage.matches) return;
+    document.body.classList.add('is-scrolling');
+    clearTimeout(scrollIdleTimer);
+    scrollIdleTimer = setTimeout(() => {
+      document.body.classList.remove('is-scrolling');
+    }, 1100);
+  };
+  window.addEventListener('scroll', () => {
+    const y = window.scrollY;
+    if (y !== lastScrollY) {
+      lastScrollY = y;
+      pingVerticalScroll();
+    }
+  }, { passive: true });
 
   // Sections whose visible background is a light color — dots invert here
   const LIGHT_SECTIONS = new Set(['about', 'services', 'contact']);
